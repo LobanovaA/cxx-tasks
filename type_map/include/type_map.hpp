@@ -41,6 +41,12 @@ public:
     {
         return (*this)[detail::type_to_index<T, types>().v];
     }
+
+    template<class T>
+    const U& as() const
+    {
+        return (*this)[detail::type_to_index<T, types>().v];
+    }
 };
 //}
 
