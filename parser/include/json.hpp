@@ -36,12 +36,12 @@ namespace types
     namespace json
     {
         //{ describe json data types
-        ... value = ...
+        using value = variant_decorator<int, float, bool, std::string, std::nullptr_t, struct array, struct object>
 
-        ... array
-        ... object
+        using array = std::vector<value>;
+        using object = std::map<std::string, value>;
 
-        ... json
+        using json = variant_decorator<array, object>;
         //}
     }
 }
@@ -55,23 +55,23 @@ namespace parser
         const auto sfloat_ = x3::real_parser<float, x3::strict_real_policies<float>>();
 
         //{ describe json grammar
-        ... number = ...
-        ... nullable = ...
+        const auto number = x3::int_ | sfloat_;
+        const auto nullable = x3::lit("null") >> x3::attr(nullptr);
 
-        ... array = ...
-        ... object = ...
-        ... json = ...
+        const auto array = x3::rule<struct array, types::json::array>{}
+                         = '[' >> value % ',' >> ']';
+        const auto object = x3::rule<struct object, types::json::object>{}
+                          = '{' >> key_value % ',' >> '}';
+        const auto json = x3::rule<struct json, types::json::json>{}
+                        = array | object;
 
-        ... value = ...
+        const auto value = x3::rule<struct value, types::json::value>{}
+                         = number | nullable | quoted_string | x3::ascii::bool_ | array | object;
 
-        ... key_value = ...
+        const auto key_value = x3::rule<struct value, std::pair<std::string, types::json::value>>{}
+                             = = quoted_string >> ':' >> value;
 
-        ... array??? = ...
-        ... object??? = ...
-        ... json??? = ...
         //}
-
-        BOOST_SPIRIT_DEFINE(array, object, json)
     }
 }
 
@@ -80,9 +80,9 @@ namespace literals
     namespace json
     {
         //{ describe ``_json`` literal
-        ... _json...
+        auto operator "" _json(const char* str, size_t)
         {
-
+            return parser::load_from_string<types::json::json>(str, parser::json::json);
         }
         //}
     }
