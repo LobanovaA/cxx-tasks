@@ -51,14 +51,14 @@ namespace parser
         namespace x3 = boost::spirit::x3;
 
         //{ csv grammar
-        const auto string = +(~x3::char_(',') | ~char_('\n'));
-        const auto cell = string | quated_string;
+        const auto string = x3::lexeme[+(x3::char_ - ',' - '\n')];
+        const auto cell = quoted_string | string;
 
         const auto row = x3::rule<class row, std::vector<std::string>>{}
                  = cell % ',';
 
         const auto csv = x3::rule<class csv, types::csv::csv>{}
-                = +row
+                = +row;
         //}
     }
 }
