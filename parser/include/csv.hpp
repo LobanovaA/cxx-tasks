@@ -70,7 +70,7 @@ namespace literals
         //{ declare ``_csv`` literal
         types::csv::csv operator "" _csv(const char* s, size_t size)
         {
-            return parser::load_from_string<types::csv::csv>(s, parser::csv::csv);
+            return parser::load_from_string<types::csv::csv>(std::string(s, size), parser::csv::csv);
         }
         //}
     }
