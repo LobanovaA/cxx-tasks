@@ -59,11 +59,7 @@ struct variant_decorator : public std::variant<Args...>
 
 	template <typename T>
 	T& as() {
-		if constexpr (!std::disjunction_v<std::is_same<T, Args>...>) {
-			return std::get<boost::recursive_wrapper<T>>(*this).get();
-		} else {
-			return std::get<T>(*this);
-		}
+		return const_cast<T&>(const_cast<const variant_decorator *>(this)->as<T>());
 	}
 };
 //}
