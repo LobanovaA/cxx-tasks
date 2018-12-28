@@ -30,12 +30,30 @@ private:
 
     void increment()
     {
-        advance(1);
+        if (index % stride_ == 0)
+        {
+            this->base_reference() += stride_ - width_ + 1;
+            index += stride_ - width_ + 1;
+        }
+        else
+        {
+            this->base_reference()++;
+            index++;
+        }
     }
 
     void decrement()
     {
-        advance(-1);
+        if (width_- index % (int)stride_ == 0)
+        {
+            this->base_reference() -= width_- index % (int)stride_ + 1;
+            index += width_- index % (int)stride_ + 1;
+        }
+        else
+        {
+            this->base_reference()--;
+            index--;
+        }
     }
 
     void advance(ptrdiff_t n)
