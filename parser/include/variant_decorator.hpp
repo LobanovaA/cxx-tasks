@@ -12,9 +12,11 @@
 namespace x3 = boost::spirit::x3;
 
 //? How to inherit x3::variant constructor & ``operator=``?
+//! При помощи директивы using
 //? Why I need inherited constructor & ``operator=``?
 //? How many constructors did I inherit?
 //? Do I need my own constructor & ``operator=``? Why?
+//! Базовых конструкторов и операторов присваивания достаточно, так как variant_decorator является декоратором, т.е. предоставляет новые методы работы с объектом базового класса
 //{
 template<class... U>
 struct variant_decorator: public x3::variant<U...>

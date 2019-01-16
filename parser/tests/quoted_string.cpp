@@ -38,6 +38,7 @@ TEST_CASE("quoted_string::quote")
 TEST_CASE("quoted_string::newline")
 {
     //? Why is it so weird string?
+    //! Необходимо проверить, что string с символами переноса строки парсится правильно, поэтому используем такие входные данные для теста
     std::string s = R"("text with
 newlines
 ")";
