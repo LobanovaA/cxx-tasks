@@ -126,6 +126,7 @@ TEST_CASE("json::operator_json")
     auto i = R"({"text": "message", "number": 123})"_json;
     const auto& j = i.as<types::json::object>();
     //? Why not just ``j["text"]``?
+    //! Если ключа "text" не существует, то оператор [] создаст этот ключ, т.е. будет создан "мусорный" элемент. Чтобы этого избежать используем at
     CHECK(j.at("text").as<std::string>() == "message");
     CHECK(j.at("number").as<int>() == 123);
 }

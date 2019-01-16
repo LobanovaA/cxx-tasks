@@ -36,6 +36,7 @@ namespace types
     namespace csv
     {
         //? Which kind of types should I use to describe the CSV type?
+        //! CSV формат представим в виде двумерного массива из строк. std::vector<std::vector<std::string>> подходит
         //{
         using csv = std::vector<std::vector<std::string>>;
         //}
@@ -47,7 +48,9 @@ namespace parser
     namespace csv
     {
         //? Why I need a x3::no_skip here? Where is the original of the error?
+        //! По умолчанию пробелы не учитываются при парсинге выражений, однако в случае строк это необходимо. В данном случае поможет x3::no_skip или x3::lexeme
         //? Where is BOOST_SPIRIT_DEFINE? Is it necessary?
+        //! BOOST_SPIRIT_DEFINE необходим, если в реализуемом парсере есть рекурсивные правила. В этом случае необходимо сначала инициализовать все правила, после чего присвоить им значения, как, например, в json парсере
         namespace x3 = boost::spirit::x3;
 
         //{ csv grammar
